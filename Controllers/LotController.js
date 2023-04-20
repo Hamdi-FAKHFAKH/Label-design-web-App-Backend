@@ -34,8 +34,8 @@ exports.UpdateLot = async (req, res) => {
          n[0] >= 1 ?
             res.status(200).json({
             Status: "Lot Modifié avec Succès",
-            "number of affected rows": n[0],
-            UtilisateurUpdated : n[1]
+            "numberOfAffectedRows": n[0],
+            LotUpdated : n[1]
             }) :
             res.status(302).json({
             Status: "Lot n'existe pas",
@@ -51,19 +51,17 @@ exports.DeleteLot =async (req, res) => {
    
      try {
         n = await Lot.destroy({ where: { numLot: req.params.id }}); // autre Méthode
-        // n = await Produit.upsert(req.body) 
         n >= 1 ?
         res.status(200).json({
             Status: "Lot Supprimer avec Succés",
             "number of affected rows": n
         })     :
         res.status(302).json({
-            Status: "Utilisateur n'existe pas",
+            Status: "Lot n'existe pas",
         });
     } catch (error) {
         res.status(400).json({
             Status: "Echec de Suppression de Lot",
-            msg : "utilisateur est associer a un autre utilisateur comme superviseur ",
         erreur: error
     });
     }

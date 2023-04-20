@@ -7,6 +7,7 @@ Router.route('/')
     .post(ProduitController.CreateProduit)
     .get(ProduitController.GetAllProduits)
 Router.route('/allData').get(ProduitController.GetAllProduitsData)
+Router.route('/withEtiquette').get(ProduitController.GetAllProduitsWithEtiquette)
 Router.route('/:id').put(ProduitController.UpdateProduit).delete(ProduitController.DeleteProduit).get(ProduitController.GetOneProduit)
 
 

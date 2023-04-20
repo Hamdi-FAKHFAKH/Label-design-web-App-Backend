@@ -107,3 +107,17 @@ exports.GetAllProduitsData = async (req,res) => {
     });
     }
 }
+exports.GetAllProduitsWithEtiquette = async (req,res)=> {
+try {
+        const produits = await Produit.findAll({where:{idEtiquette:!null}});
+        res.status(200).json({
+            Status: "Succes",
+            produits: produits
+        });
+    } catch (error) {
+        res.status(400).json({
+        Status: "Produit Not Found",
+        erreur: error
+    });
+    }
+}
