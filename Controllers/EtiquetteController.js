@@ -16,7 +16,7 @@ exports.CreateEtiquette = async (req, res) => {
 exports.GetAllEtiquettes = async (req, res) => {
 	try {
 		const etiquettes = await Etiquette.findAll();
-		res.status(302).json({
+		res.status(200).json({
 			Status: "Succes",
 			etiquettes,
 		});
@@ -33,7 +33,7 @@ exports.UpdateEtiquette = async (req, res) => {
 			where: { id: req.params.id },
 		});
 		if (n >= 1) {
-			res.status(301).json({
+			res.status(200).json({
 				Status: "Etiquette Updated Successfully",
 				"number of affected rows": n[0],
 				Etiquette: n[1],

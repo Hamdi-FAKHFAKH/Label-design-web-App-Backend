@@ -22,73 +22,122 @@ const Composent = sequelize.define("Composent", {
 		type: DataTypes.STRING,
 		allowNull: true,
 	},
-	largeur: {
-		type: DataTypes.FLOAT,
-		allowNull: true,
-	},
-	longeur: {
-		type: DataTypes.FLOAT,
+	title: {
+		type: DataTypes.STRING,
 		allowNull: true,
 	},
 	format: {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: "rectangle",
+	},
+	children: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	data: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	dataMatrixFormat: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	dataMatrixCode: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	height: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	width: {
+		type: DataTypes.STRING,
+		allowNull: true,
 	},
 	color: {
 		type: DataTypes.STRING,
 		allowNull: true,
 		defaultValue: "white",
 	},
-	backgroundColor: {
+	"background-color": {
 		type: DataTypes.STRING,
 		allowNull: true,
 		defaultValue: "white",
 	},
-	BorderType: {
+	"border-style": {
 		type: DataTypes.STRING,
 		allowNull: true,
 		defaultValue: "none",
 	},
-	border: {
+	"border-color": {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: "none",
-		// "taille type color raduis"
+	},
+	"border-width": {
+		type: DataTypes.STRING,
+		allowNull: true,
 	},
 	padding: {
-		type: DataTypes.FLOAT,
+		type: DataTypes.STRING,
 		allowNull: true,
 		defaultValue: 5.0,
 	},
-	posX: {
-		type: DataTypes.FLOAT,
-		allowNull: false,
-		defaultValue: 2.0,
+	"padding-top": {
+		type: DataTypes.STRING,
+		allowNull: true,
 	},
-	posY: {
-		type: DataTypes.FLOAT,
-		allowNull: false,
-		defaultValue: 2.0,
+	"padding-bottom": {
+		type: DataTypes.STRING,
+		allowNull: true,
 	},
-	fontFamily: {
+	"padding-right": {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	"padding-left": {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	"font-style": {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	"text-decoration": {
+		type: DataTypes.STRING,
+		allowNull: true,
+		defaultValue: "none",
+	},
+	margin: {
+		type: DataTypes.STRING,
+		allowNull: true,
+		defaultValue: 0,
+	},
+	"margin-left": {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	"margin-bottom": {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	"margin-top": {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	"margin-right": {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+
+	"font-family": {
 		type: DataTypes.STRING,
 		allowNull: true,
 		defaultValue: "Time new roman",
 	},
-	fontWeight: {
+	"font-size": {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: "none",
-	},
-	fontSize: {
-		type: DataTypes.FLOAT,
-		allowNull: true,
-		defaultValue: 12.0,
-	},
-	textSpacing: {
-		type: DataTypes.FLOAT,
-		allowNull: true,
+		defaultValue: 15.0,
 	},
 	underLine: {
 		type: DataTypes.BOOLEAN,
@@ -100,26 +149,21 @@ const Composent = sequelize.define("Composent", {
 		allowNull: true,
 		defaultValue: false,
 	},
-
-	Capitale: {
+	bold: {
 		type: DataTypes.BOOLEAN,
 		allowNull: true,
 		defaultValue: false,
 	},
-	align: {
+	"text-align": {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: "center",
+		defaultValue: "left",
 	},
-	orientation: {
-		type: DataTypes.STRING,
-		allowNull: true,
-		defaultValue: "0",
-	},
-	data: {
+	transform: {
 		type: DataTypes.STRING,
 		allowNull: true,
 	},
+
 	createur: {
 		type: DataTypes.STRING,
 		allowNull: true,
@@ -130,7 +174,7 @@ const Composent = sequelize.define("Composent", {
 	},
 });
 try {
-	Composent.sync({ force: true }).then(() => {
+	Composent.sync().then(() => {
 		console.log(
 			"\x1b[32m",
 			"Composent Model synchronized successfully.",

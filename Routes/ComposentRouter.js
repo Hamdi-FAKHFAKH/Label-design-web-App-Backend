@@ -9,4 +9,7 @@ Router.route("/:id")
 	.put(ComposentController.UpdateComposent)
 	.get(ComposentController.GetOneComposent)
 	.delete(ComposentController.DeleteComposent);
+Router.route("/byEtiquette/:id").delete(
+	ComposentController.DeleteComposentsByIdEtiquette
+);
 module.exports = Router;

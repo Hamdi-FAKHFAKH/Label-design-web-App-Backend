@@ -69,6 +69,24 @@ exports.DeleteComposent = async (req, res) => {
 		});
 	}
 };
+exports.DeleteComposentsByIdEtiquette = async (req, res) => {
+	try {
+		n = await Composent.destroy({ where: { refEtiquette: req.params.id } });
+		n >= 1
+			? res.status(200).json({
+					Status: "Composents Supprimer avec Succés",
+					numberOfAffectedRows: n,
+			  })
+			: res.status(302).json({
+					Status: "Composent n'existe pas",
+			  });
+	} catch (error) {
+		res.status(400).json({
+			Status: "Echec de Suppression de Composent",
+			erreur: error,
+		});
+	}
+};
 exports.GetOneComposent = async (req, res) => {
 	try {
 		composent = await Composent.findByPk(req.params.id); // autre Méthode
