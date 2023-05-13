@@ -83,6 +83,10 @@ const Produit = sequelize.define("Produits", {
 		type: DataTypes.BOOLEAN,
 		allowNull: true,
 	},
+	datamatrixData: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
 	withSN: {
 		type: DataTypes.BOOLEAN,
 		allowNull: true,

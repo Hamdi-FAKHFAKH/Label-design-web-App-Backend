@@ -15,14 +15,14 @@ exports.CreateComposent = async (req, res) => {
 };
 exports.GetAllComposents = async (req, res) => {
 	try {
-		const composent = await Composent.findAll();
+		const composents = await Composent.findAll();
 		res.status(200).json({
 			Status: "Succes",
-			composent,
+			composents,
 		});
 	} catch (error) {
 		res.status(400).json({
-			Status: "Composent n'existe pas",
+			Status: "aucun Composent existe",
 			erreur: error,
 		});
 	}
@@ -78,7 +78,7 @@ exports.DeleteComposentsByIdEtiquette = async (req, res) => {
 					numberOfAffectedRows: n,
 			  })
 			: res.status(302).json({
-					Status: "Composent n'existe pas",
+					Status: "ucun composant supprimé",
 			  });
 	} catch (error) {
 		res.status(400).json({
@@ -91,11 +91,33 @@ exports.GetOneComposent = async (req, res) => {
 	try {
 		composent = await Composent.findByPk(req.params.id); // autre Méthode
 		// n = await Produit.upsert(req.body)
-		console.log(Composent);
+		console.log(composent);
 		if (composent != null) {
 			res.status(200).json({
 				Status: "Succes",
 				composent,
+			});
+		} else {
+			throw new Error("Composent n'existe pas");
+		}
+	} catch (error) {
+		res.status(204).json({
+			Status: "Composent n'existe pas",
+			erreur: error,
+		});
+	}
+};
+exports.GetAllComposentByEtiquette = async (req, res) => {
+	try {
+		composents = await Composent.findAll({
+			where: { refEtiquette: req.params.id },
+		}); // autre Méthode
+		// n = await Produit.upsert(req.body)
+		console.log(Composent);
+		if (composents != null) {
+			res.status(200).json({
+				Status: "Succes",
+				composents,
 			});
 		} else {
 			throw new Error("Composent n'existe pas");

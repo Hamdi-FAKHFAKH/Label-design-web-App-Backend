@@ -22,6 +22,19 @@ const Composent = sequelize.define("Composent", {
 		type: DataTypes.STRING,
 		allowNull: true,
 	},
+	x: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	y: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+
+	ordre: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	},
 	title: {
 		type: DataTypes.STRING,
 		allowNull: true,
@@ -31,10 +44,6 @@ const Composent = sequelize.define("Composent", {
 		allowNull: true,
 	},
 	children: {
-		type: DataTypes.STRING,
-		allowNull: true,
-	},
-	data: {
 		type: DataTypes.STRING,
 		allowNull: true,
 	},
@@ -57,12 +66,12 @@ const Composent = sequelize.define("Composent", {
 	color: {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: "white",
+		defaultValue: "#000000",
 	},
 	"background-color": {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: "white",
+		defaultValue: "#ffffff",
 	},
 	"border-style": {
 		type: DataTypes.STRING,
@@ -80,7 +89,6 @@ const Composent = sequelize.define("Composent", {
 	padding: {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: 5.0,
 	},
 	"padding-top": {
 		type: DataTypes.STRING,

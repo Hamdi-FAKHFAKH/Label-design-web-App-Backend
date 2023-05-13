@@ -15,8 +15,11 @@ const SerialNumberRouer = require("./Routes/SerialNumberRouter");
 const EtiquetteRouter = require("./Routes/EtiquetteRouter");
 const AuthentificationController = require("./Controllers/AuthentificationController");
 const ComposentRouter = require("./Routes/ComposentRouter");
+const FormRouter = require("./Routes/FormRouter");
+const OFRouter = require("./Routes/OFRouter");
 const AppError = require("./Utils/AppError");
 var cors = require("cors");
+const fs = require("fs");
 // ----------------------------------------------- On fait appelle a tous les middleware que nous besoin ici ------------------------------
 const app = express();
 // pour accéeder au propriéter body de requéte HTTP
@@ -38,6 +41,8 @@ app.use("/api/v1/lot", LotRouter);
 app.use("/api/v1/serialNumber", SerialNumberRouer);
 app.use("/api/v1/etiquette", EtiquetteRouter);
 app.use("/api/v1/composent", ComposentRouter);
+app.use("/api/v1/forms", FormRouter);
+app.use("/api/v1/OF", OFRouter);
 
 app.use(function (req, res, next) {
 	//Enabling CORS
@@ -70,6 +75,24 @@ app.post("/api/v1/printPDF/", async (req, res) => {
 app.get("/api/v1/printPDF/", async (req, res) => {
 	const listPrinter = await (await getPrinters()).map((val) => val.name);
 	res.json(listPrinter);
+});
+//check if label file exist
+app.post("/api/v1/LabelFile/", (req, res) => {
+	if (fs.existsSync(req.body.path)) {
+		res.status(200).json({ exist: true, message: "File Found" });
+	} else {
+		res.status(400).json({ exist: false, message: "File Not Found" });
+	}
+});
+//delete File
+app.delete("/api/v1/LabelFile/", (req, res) => {
+	fs.unlink(req.body.path, (err) => {
+		if (!err) {
+			res.status(200).json({ deleted: true, message: "File deleted" });
+		} else {
+			res.status(200).json({ deleted: false, message: "File not deleted" });
+		}
+	});
 });
 // Handling Unhandled Routes
 app.all("*", (req, res, next) => {
