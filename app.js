@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
-const upload = require("express-fileupload");
-const { print, getPrinters } = require("pdf-to-printer");
+// const upload = require("express-fileupload");
+const multer = require("multer");
 const ProduitRouter = require("./Routes/ProduitsRouter");
 const LienProTypeAtelierRouter = require("./Routes/LienProTypeAtelierRouter");
 const UtilisateurRouter = require("./Routes/UtilisateurRouter");
@@ -17,17 +17,21 @@ const AuthentificationController = require("./Controllers/AuthentificationContro
 const ComposentRouter = require("./Routes/ComposentRouter");
 const FormRouter = require("./Routes/FormRouter");
 const OFRouter = require("./Routes/OFRouter");
+const TagRouter = require("./Routes/TagRouter");
+const EtiquettesImprimeesRouter = require("./Routes/EtiquettesImprimeesRouter");
 const AppError = require("./Utils/AppError");
 var cors = require("cors");
 const fs = require("fs");
 // ----------------------------------------------- On fait appelle a tous les middleware que nous besoin ici ------------------------------
 const app = express();
 // pour accéeder au propriéter body de requéte HTTP
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 // use third party middleware ( middleware from npm)
 app.use(morgan("dev"));
 app.use(cors());
-app.use(upload());
+
+// app.use(upload());
 app.all("*", AuthentificationController.protect);
 app.use("/api/v1/Produits", ProduitRouter);
 app.use("/api/v1/LienProTypeAtelier", LienProTypeAtelierRouter);
@@ -43,39 +47,43 @@ app.use("/api/v1/etiquette", EtiquetteRouter);
 app.use("/api/v1/composent", ComposentRouter);
 app.use("/api/v1/forms", FormRouter);
 app.use("/api/v1/OF", OFRouter);
+app.use("/api/v1/tag", TagRouter);
+app.use("/api/v1/etiquetteImprimee", EtiquettesImprimeesRouter);
 
-app.use(function (req, res, next) {
-	//Enabling CORS
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
-	);
-	next();
-});
-app.post("/api/v1/printPDF/", async (req, res) => {
-	try {
-		const options = {
-			copies: req.body.copies,
-			monochrome: true,
-			paperSize: "A4",
-			printDialog: false,
-			printer: req.body.printer,
-		};
-		await print("test.pdf", options);
-		res.json(body);
-	} catch (err) {
-		res.status(400).json({
-			Status: "Failed",
-			erreur: err,
-		});
-	}
-});
-app.get("/api/v1/printPDF/", async (req, res) => {
-	const listPrinter = await (await getPrinters()).map((val) => val.name);
-	res.json(listPrinter);
-});
+// app.use(function (req, res, next) {
+// 	//Enabling CORS
+// 	res.header("Access-Control-Allow-Origin", "*");
+// 	res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+// 	res.header(
+// 		"Access-Control-Allow-Headers",
+// 		"Origin, X-Requested-With, ContentType, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
+// 	);
+// 	next();
+// });
+//
+// app.post("/api/v1/printPDF/", async (req, res) => {
+// 	try {
+// 		const options = {
+// 			copies: req.body.copies,
+// 			monochrome: true,
+// 			paperSize: "A4",
+// 			printDialog: false,
+// 			printer: req.body.printer,
+// 		};
+// 		await print("test.pdf", options);
+// 		res.json(body);
+// 	} catch (err) {
+// 		res.status(400).json({
+// 			Status: "Failed",
+// 			erreur: err,
+// 		});
+// 	}
+// });
+// app.get("/api/v1/printPDF/", async (req, res) => {
+// 	const listPrinter = await (await getPrinters()).map((val) => val.name);
+// 	res.json(listPrinter);
+// });
+
 //check if label file exist
 app.post("/api/v1/LabelFile/", (req, res) => {
 	if (fs.existsSync(req.body.path)) {
@@ -84,6 +92,7 @@ app.post("/api/v1/LabelFile/", (req, res) => {
 		res.status(400).json({ exist: false, message: "File Not Found" });
 	}
 });
+
 //delete File
 app.delete("/api/v1/LabelFile/", (req, res) => {
 	fs.unlink(req.body.path, (err) => {
@@ -94,6 +103,34 @@ app.delete("/api/v1/LabelFile/", (req, res) => {
 		}
 	});
 });
+//savePdfFile
+// const storage = multer.diskStorage({
+// 	destination: function (req, file, cb) {
+// 		cb(null, "PdfFiles/");
+// 	},
+// 	filename: function (req, file, cb) {
+// 		cb(null, file.originalname);
+// 	},
+// });
+// const uploadFile = multer({ storage: storage });
+app.post("/api/v1/savePdfFile/", (req, res) => {
+	// fs.writeFile("sample.pdf", res.body, "base64", function (err) {
+	// 	console.log(err);
+	// });
+	const pdfString = req.body.data.split(",")[1];
+	fs.writeFile(
+		`./PdfFiles/${req.body.fileName}`,
+		pdfString,
+		"base64",
+		function (err) {
+			console.log(err);
+		}
+	);
+	res.status(200).json({
+		msg: "success",
+	});
+});
+
 // Handling Unhandled Routes
 app.all("*", (req, res, next) => {
 	next(new AppError("Page Not Found at URI : " + req.originalUrl, 404));

@@ -23,13 +23,13 @@ const Produit = sequelize.define("Produits", {
 		allowNull: true,
 	},
 	numLot: {
-		type: DataTypes.STRING,
+		type: DataTypes.INTEGER,
 		allowNull: true,
 		references: {
 			model: "Lot",
 			key: "numLot",
 		},
-		onDelete: "SET NULL",
+		onDelete: "CASCADE",
 	},
 	codeFournisseur: {
 		type: DataTypes.STRING,
@@ -117,7 +117,7 @@ const Produit = sequelize.define("Produits", {
 	},
 });
 try {
-	Produit.sync({ alter: true }).then(() => {
+	Produit.sync().then(() => {
 		console.log(
 			"\x1b[32m",
 			"Produit Model synchronized successfully.",

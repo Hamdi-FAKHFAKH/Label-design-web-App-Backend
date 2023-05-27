@@ -20,7 +20,7 @@ const OF = sequelize.define("OF", {
 	},
 });
 try {
-	OF.sync({ alter: true }).then(() => {
+	OF.sync().then(() => {
 		console.log("\x1b[32m", "OF Model synchronized successfully.", "\x1b[0m");
 	});
 } catch (err) {
