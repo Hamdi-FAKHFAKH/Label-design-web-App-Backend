@@ -15,11 +15,25 @@ exports.CreateComposent = async (req, res) => {
 };
 exports.GetAllComposents = async (req, res) => {
 	try {
-		const composents = await Composent.findAll();
-		res.status(200).json({
-			Status: "Succes",
-			composents,
-		});
+		if (req.query.idEtiquette) {
+			composents = await Composent.findAll({
+				where: { refEtiquette: req.query.idEtiquette },
+			}); // autre Méthode
+			// n = await Produit.upsert(req.body)
+			console.log(Composent);
+			if (composents != null) {
+				res.status(200).json({
+					Status: "Succes",
+					composents,
+				});
+			}
+		} else {
+			const composents = await Composent.findAll();
+			res.status(200).json({
+				Status: "Succes",
+				composents,
+			});
+		}
 	} catch (error) {
 		res.status(400).json({
 			Status: "aucun Composent existe",
@@ -71,7 +85,9 @@ exports.DeleteComposent = async (req, res) => {
 };
 exports.DeleteComposentsByIdEtiquette = async (req, res) => {
 	try {
-		n = await Composent.destroy({ where: { refEtiquette: req.params.id } });
+		n = await Composent.destroy({
+			where: { refEtiquette: req.query.idEtiquette },
+		});
 		n >= 1
 			? res.status(200).json({
 					Status: "Composents Supprimer avec Succés",
@@ -96,28 +112,6 @@ exports.GetOneComposent = async (req, res) => {
 			res.status(200).json({
 				Status: "Succes",
 				composent,
-			});
-		} else {
-			throw new Error("Composent n'existe pas");
-		}
-	} catch (error) {
-		res.status(204).json({
-			Status: "Composent n'existe pas",
-			erreur: error,
-		});
-	}
-};
-exports.GetAllComposentByEtiquette = async (req, res) => {
-	try {
-		composents = await Composent.findAll({
-			where: { refEtiquette: req.params.id },
-		}); // autre Méthode
-		// n = await Produit.upsert(req.body)
-		console.log(Composent);
-		if (composents != null) {
-			res.status(200).json({
-				Status: "Succes",
-				composents,
 			});
 		} else {
 			throw new Error("Composent n'existe pas");

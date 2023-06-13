@@ -5,7 +5,7 @@ const Router = express.Router();
 Router.route('/')
     .get(LotController.GetAllLots)
     .post(LotController.CreateLot);
-Router.route('/findLot').post(LotController.FindByFormat)
+Router.route('/').post(LotController.FindByFormat)
 Router.route('/:id')
     .put(LotController.UpdateLot)
     .get(LotController.GetOneLot)

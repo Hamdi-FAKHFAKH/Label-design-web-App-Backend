@@ -4,12 +4,10 @@ const ComposentController = require("../Controllers/ComposentController");
 const Router = express.Router();
 Router.route("/")
 	.get(ComposentController.GetAllComposents)
-	.post(ComposentController.CreateComposent);
+	.post(ComposentController.CreateComposent)
+	.delete(ComposentController.DeleteComposentsByIdEtiquette);
 Router.route("/:id")
 	.put(ComposentController.UpdateComposent)
 	.get(ComposentController.GetOneComposent)
 	.delete(ComposentController.DeleteComposent);
-Router.route("/byEtiquette/:id")
-	.delete(ComposentController.DeleteComposentsByIdEtiquette)
-	.get(ComposentController.GetAllComposentByEtiquette);
 module.exports = Router;

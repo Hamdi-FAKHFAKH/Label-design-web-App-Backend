@@ -12,10 +12,10 @@ const Formes = sequelize.define("Formes", {
 	path: {
 		type: DataTypes.TEXT,
 	},
-	clicked: {
-		type: DataTypes.BOOLEAN,
-		defaultValue: false,
-	},
+	// clicked: {
+	// 	type: DataTypes.BOOLEAN,
+	// 	defaultValue: false,
+	// },
 });
 try {
 	Formes.sync().then(() => {

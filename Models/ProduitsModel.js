@@ -7,7 +7,7 @@ const Produit = sequelize.define("Produits", {
 		primaryKey: true,
 		references: {
 			model: "SDTPRA",
-			key: "ProRef",
+			key: "proRef",
 		},
 	},
 	nomProduit: {
@@ -56,7 +56,7 @@ const Produit = sequelize.define("Produits", {
 			model: "Etiquette",
 			key: "id",
 		},
-		onDelete: "SET NULL",
+		onDelete: "CASCADE",
 	},
 	idSN: {
 		type: DataTypes.STRING,
@@ -117,7 +117,7 @@ const Produit = sequelize.define("Produits", {
 	},
 });
 try {
-	Produit.sync().then(() => {
+	Produit.sync({ alter: true }).then(() => {
 		console.log(
 			"\x1b[32m",
 			"Produit Model synchronized successfully.",

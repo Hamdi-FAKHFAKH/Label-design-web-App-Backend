@@ -71,7 +71,7 @@ const Composent = sequelize.define("Composent", {
 	"background-color": {
 		type: DataTypes.STRING,
 		allowNull: true,
-		defaultValue: "#ffffff",
+		defaultValue: "##FF000000",
 	},
 	"border-style": {
 		type: DataTypes.STRING,

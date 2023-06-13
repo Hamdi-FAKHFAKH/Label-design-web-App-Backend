@@ -16,11 +16,35 @@ exports.CreateEtiquetteImprimee = async (req, res) => {
 };
 exports.GetAllEtiquettesImprimees = async (req, res) => {
 	try {
-		const etiquettesImprimees = await EtiquetteImprimees.findAll();
-		res.status(200).json({
-			Status: "Succes",
-			etiquettesImprimees,
-		});
+		if (req.query.numOF) {
+			const etiquettesImprimees = await EtiquetteImprimees.findAll({
+				attributes: [
+					"numOF",
+					"serialNumber",
+					"refProd",
+					"formatLot",
+					"dataMatrixData",
+				],
+				where: { numOF: req.query.numOF },
+				group: [
+					"numOF",
+					"serialNumber",
+					"refProd",
+					"formatLot",
+					"dataMatrixData",
+				],
+			});
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+		} else {
+			const etiquettesImprimees = await EtiquetteImprimees.findAll();
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+		}
 	} catch (error) {
 		res.status(400).json({
 			Status: "EtiquetteImprimees Not Found",
@@ -55,7 +79,6 @@ exports.UpdateEtiquetteImprimee = async (req, res) => {
 exports.DeleteEtiquetteImprimee = async (req, res) => {
 	try {
 		n = await EtiquetteImprimees.destroy({ where: { id: req.params.id } }); // autre Méthode
-		// n = await Produit.upsert(req.body)
 		if (n >= 1) {
 			res.status(200).json({
 				Status: "EtiquetteImprimees Deleted Successfully",

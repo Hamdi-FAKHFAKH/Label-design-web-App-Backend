@@ -62,7 +62,7 @@ const EtiquetteImprimees = sequelize.define("EtiquetteImprimees", {
 	},
 });
 try {
-	EtiquetteImprimees.sync({ alter: true }).then(() => {
+	EtiquetteImprimees.sync().then(() => {
 		console.log(
 			"\x1b[32m",
 			"EtiquetteImprimees Model synchronized successfully.",

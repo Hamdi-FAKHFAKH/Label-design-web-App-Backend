@@ -6,17 +6,17 @@ LienProTypeAtelier = sequelize.define("LienProTypeAtelier", {
 		type: DataTypes.STRING,
 		primaryKey: true,
 	},
-	Libelle: {
-		type: DataTypes.STRING,
-		allowNull: true,
-	},
+	// Libelle: {
+	// 	type: DataTypes.STRING,
+	// 	allowNull: true,
+	// },
 	Liecod: {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
 });
 try {
-	LienProTypeAtelier.sync().then(() => {
+	LienProTypeAtelier.sync({ alter: true }).then(() => {
 		console.log(
 			"\x1b[32m",
 			"LienProTypeAtelier Model synchronized successfully.",

@@ -17,11 +17,21 @@ exports.CreateProduit = async (req, res) => {
 };
 exports.GetAllProduits = async (req, res) => {
 	try {
-		const produits = await Produit.findAll();
-		res.status(200).json({
-			Status: "Succes",
-			produits: produits,
-		});
+		if (req.query.withEtiquette) {
+			const produits = await Produit.findAll({
+				where: { idEtiquette: { [Op.not]: null } },
+			});
+			res.status(200).json({
+				Status: "Succes",
+				produits: produits,
+			});
+		} else {
+			const produits = await Produit.findAll();
+			res.status(200).json({
+				Status: "Succes",
+				produits: produits,
+			});
+		}
 	} catch (error) {
 		res.status(400).json({
 			Status: "Produit Not Found",
@@ -76,7 +86,7 @@ exports.GetOneProduit = async (req, res) => {
 			throw new Error("Produit not Found");
 		}
 	} catch (error) {
-		res.status(400).json({
+		res.status(204).json({
 			Status: "Produit Not Found",
 			erreur: error,
 		});
@@ -86,7 +96,7 @@ exports.GetAllProduitsData = async (req, res) => {
 	try {
 		const [results, metadata] =
 			await sequelize.query(`SELECT Client.codeClient, Client.desClient, 
-                  Fournisseur.desFournisseur, Lot.format, Lot.desLot, Produits.*, SDTPRA.ProtypCod, SDTPRA.prodes1, 
+                  Fournisseur.desFournisseur, Lot.format as formatLot, Lot.desLot, Produits.*, SDTPRA.ProtypCod, SDTPRA.prodes1, 
                   SDTPRA.prodes2, SerialNumber.suffix, SerialNumber.prefix, SerialNumber.nbrCaractere, 
                   SerialNumber.typeCompteur, SerialNumber.pas
                   FROM     Produits LEFT JOIN
@@ -103,22 +113,6 @@ exports.GetAllProduitsData = async (req, res) => {
 	} catch (error) {
 		res.status(400).json({
 			Status: "Produit Data Not Found",
-			erreur: error,
-		});
-	}
-};
-exports.GetAllProduitsWithEtiquette = async (req, res) => {
-	try {
-		const produits = await Produit.findAll({
-			where: { idEtiquette: { [Op.not]: null } },
-		});
-		res.status(200).json({
-			Status: "Succes",
-			produits: produits,
-		});
-	} catch (error) {
-		res.status(400).json({
-			Status: "Produit Not Found",
 			erreur: error,
 		});
 	}

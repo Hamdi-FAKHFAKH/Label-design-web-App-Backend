@@ -19,7 +19,7 @@ Fournisseur = sequelize.define("Fournisseur", {
 	},
 });
 try {
-	Fournisseur.sync({ alert: true }).then(() => {
+	Fournisseur.sync().then(() => {
 		console.log(
 			"\x1b[32m",
 			"Fournisseur Model synchronized successfully.",
