@@ -6,7 +6,6 @@ const EtiquetteImprimees = sequelize.define("EtiquetteImprimees", {
 		primaryKey: true,
 		autoIncrement: true,
 	},
-
 	refProd: {
 		type: DataTypes.STRING,
 		allowNull: false,
