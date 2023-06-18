@@ -10,6 +10,7 @@ const HistoriqueVerificationEtiquette = sequelize.define(
 		},
 		problemId: {
 			type: DataTypes.INTEGER,
+			allowNull: true,
 			references: {
 				model: "ProblemModel",
 				key: "id",
