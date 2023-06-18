@@ -18,8 +18,7 @@ exports.GetAllComposents = async (req, res) => {
 		if (req.query.idEtiquette) {
 			composents = await Composent.findAll({
 				where: { refEtiquette: req.query.idEtiquette },
-			}); // autre Méthode
-			// n = await Produit.upsert(req.body)
+			});
 			console.log(Composent);
 			if (composents != null) {
 				res.status(200).json({
@@ -54,7 +53,7 @@ exports.UpdateComposent = async (req, res) => {
 					numberOfAffectedRows: n[0],
 					ClientUpdated: n[1],
 			  })
-			: res.status(302).json({
+			: res.status(203).json({
 					Status: "Composent n'existe pas",
 			  });
 	} catch (error) {
@@ -73,7 +72,7 @@ exports.DeleteComposent = async (req, res) => {
 					Status: "Composent Supprimer avec Succés",
 					numberOfAffectedRows: n,
 			  })
-			: res.status(302).json({
+			: res.status(203).json({
 					Status: "Composent n'existe pas",
 			  });
 	} catch (error) {
@@ -93,7 +92,7 @@ exports.DeleteComposentsByIdEtiquette = async (req, res) => {
 					Status: "Composents Supprimer avec Succés",
 					numberOfAffectedRows: n,
 			  })
-			: res.status(302).json({
+			: res.status(203).json({
 					Status: "ucun composant supprimé",
 			  });
 	} catch (error) {
@@ -117,7 +116,7 @@ exports.GetOneComposent = async (req, res) => {
 			throw new Error("Composent n'existe pas");
 		}
 	} catch (error) {
-		res.status(204).json({
+		res.status(203).json({
 			Status: "Composent n'existe pas",
 			erreur: error,
 		});

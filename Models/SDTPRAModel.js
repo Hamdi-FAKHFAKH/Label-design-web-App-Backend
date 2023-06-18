@@ -15,15 +15,13 @@ const SDTPRA = sequelize.define("SDTPRA", {
 	},
 	prodes1: {
 		type: DataTypes.STRING,
-		unique: true,
 	},
 	prodes2: {
 		type: DataTypes.STRING,
-		unique: true,
 	},
 });
 try {
-	SDTPRA.sync().then(() => {
+	SDTPRA.sync({ alter: true }).then(() => {
 		console.log(
 			"\x1b[32m",
 			"SDTPRA Model synchronized successfully.",

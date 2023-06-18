@@ -1,20 +1,24 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../ConnexionDB");
 // LienProTypeAtelier Model
-LienProTypeAtelier = sequelize.define("LienProTypeAtelier", {
-	ProtypCod: {
-		type: DataTypes.STRING,
-		primaryKey: true,
+LienProTypeAtelier = sequelize.define(
+	"LienProTypeAtelier",
+	{
+		ProtypCod: {
+			type: DataTypes.STRING,
+			primaryKey: true,
+		},
+		// Libelle: {
+		// 	type: DataTypes.STRING,
+		// 	allowNull: true,
+		// },
+		Liecod: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 	},
-	// Libelle: {
-	// 	type: DataTypes.STRING,
-	// 	allowNull: true,
-	// },
-	Liecod: {
-		type: DataTypes.STRING,
-		allowNull: false,
-	},
-});
+	{ timestamps: false }
+);
 try {
 	LienProTypeAtelier.sync({ alter: true }).then(() => {
 		console.log(
