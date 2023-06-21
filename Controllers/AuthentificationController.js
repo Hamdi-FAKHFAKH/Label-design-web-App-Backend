@@ -84,13 +84,13 @@ exports.protect = async (req, res, next) => {
 			new AppError("l'utilisateur appartient à ce jeton n'existe plus", 401)
 		);
 	// throw ERROR lorsque Mot de passe change pour changer le Token ( pour de demancde de re connecter)
-	if (parseInt(user.updatedAt.getTime() / 1000, 10) > decode.iat) {
-		return next(
-			new AppError(
-				"mot de passe changer veuillez vous connecter autre fois pour avoir accès"
-			)
-		);
-	}
+	// if (parseInt(user.updatedAt.getTime() / 1000, 10) > decode.iat) {
+	// 	return next(
+	// 		new AppError(
+	// 			"mot de passe changer veuillez vous connecter autre fois pour avoir accès"
+	// 		)
+	// 	);
+	// }
 	next();
 };
 exports.CheckPassword = async (req, res, next) => {

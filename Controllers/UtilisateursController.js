@@ -43,6 +43,7 @@ exports.UpdateUtilisateur = async (req, res) => {
 					Status: "Utilisateur Not Found",
 			  });
 	} catch (error) {
+		console.log("failed");
 		console.log(error);
 		res.status(400).json({
 			Status: "utilisateur Update Failed ",

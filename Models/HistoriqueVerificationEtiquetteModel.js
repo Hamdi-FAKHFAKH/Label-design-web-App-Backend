@@ -19,6 +19,10 @@ const HistoriqueVerificationEtiquette = sequelize.define(
 		dataMatrixData: {
 			type: DataTypes.TEXT,
 		},
+		statut: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
 		userMatricule: {
 			type: DataTypes.STRING,
 			references: {
