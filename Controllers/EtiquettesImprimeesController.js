@@ -1,5 +1,6 @@
 const EtiquetteImprimees = require("../Models/EtiquettesImprimeesModel");
 const sequelize = require("../ConnexionDB");
+const { Op } = require("sequelize");
 exports.CreateEtiquetteImprimee = async (req, res) => {
 	try {
 		const etiquetteImprimee = await EtiquetteImprimees.create(req.body);
@@ -16,6 +17,8 @@ exports.CreateEtiquetteImprimee = async (req, res) => {
 };
 exports.GetAllEtiquettesImprimees = async (req, res) => {
 	try {
+		console.log(req.query.month);
+		//--------------------------------------- by OF Num ---------------------------------
 		if (req.query.numOF) {
 			const etiquettesImprimees = await EtiquetteImprimees.findAll({
 				attributes: [
@@ -38,6 +41,159 @@ exports.GetAllEtiquettesImprimees = async (req, res) => {
 				Status: "Succes",
 				etiquettesImprimees,
 			});
+			//----------------------------------------------- BY YEAR & Month ----------------
+		} else if (
+			req.query.count !== undefined &&
+			req.query.action !== undefined &&
+			req.query.SN !== undefined
+		) {
+			const etiquettesImprimees = await EtiquetteImprimees.findAll({
+				attributes: [[sequelize.fn("COUNT", sequelize.col("id")), "total"]],
+				where: {
+					[Op.and]: [
+						{ action: req.query.action, serialNumber: { [Op.ne]: null } },
+					],
+				},
+			});
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+		}
+		///------------------------------------------------------------------------------------
+		else if (req.query.count !== undefined && req.query.action !== undefined) {
+			const etiquettesImprimees = await EtiquetteImprimees.findAll({
+				attributes: [[sequelize.fn("COUNT", sequelize.col("id")), "total"]],
+				where: {
+					[Op.and]: [{ action: req.query.action }],
+				},
+			});
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+		}
+		///---------------------------------------------------------------------------
+		else if (req.query.count !== undefined) {
+			const etiquettesImprimees = await EtiquetteImprimees.findAll({
+				attributes: [[sequelize.fn("COUNT", sequelize.col("id")), "total"]],
+			});
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+		}
+		//-------------------------------------------------------------------------------------
+		else if (
+			// req.query.day &&
+			req.query.month !== undefined &&
+			req.query.year &&
+			req.query.action
+		) {
+			console.log("month");
+			const etiquettesImprimees = await EtiquetteImprimees.findAll(
+				{
+					attributes: [
+						[sequelize.fn("COUNT", sequelize.col("id")), "total"],
+						[sequelize.fn("MONTH", sequelize.col("date")), "month"],
+					],
+					where: {
+						[Op.and]: [
+							sequelize.where(
+								sequelize.fn("YEAR", sequelize.col("date")),
+								req.query.year
+							),
+							// sequelize.where(
+							// 	sequelize.fn("MONTH", sequelize.col("date")),
+							// 	req.query.month
+							// ),
+							// sequelize.where(
+							// 	sequelize.fn("DAY", sequelize.col("date")),
+							// 	req.query.day
+							// ),
+							{ action: req.query.action, serialNumber: { [Op.ne]: null } },
+						],
+					},
+					group: [[sequelize.fn("MONTH", sequelize.col("date")), "month"]],
+				}
+				// [[sequelize.fn("MONTH", sequelize.col("created_at")), "month"]],
+				// { include: [[sequelize.fn("COUNT", sequelize.col("id")), "total"]] },
+			);
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+			//--------------------------------------------------- All -------------------------------------------
+		} else if (
+			req.query.day !== undefined &&
+			req.query.year &&
+			req.query.action
+		) {
+			console.log("day");
+			console.log(req.query.day);
+			const etiquettesImprimees = await EtiquetteImprimees.findAll(
+				{
+					attributes: [
+						[sequelize.fn("COUNT", sequelize.col("id")), "total"],
+						[sequelize.fn("DAY", sequelize.col("date")), "day"],
+						[sequelize.fn("MONTH", sequelize.col("date")), "month"],
+					],
+					where: {
+						[Op.and]: [
+							sequelize.where(
+								sequelize.fn("YEAR", sequelize.col("date")),
+								req.query.year
+							),
+							// sequelize.where(
+							// 	sequelize.fn("MONTH", sequelize.col("date")),
+							// 	req.query.month
+							// ),
+							// sequelize.where(
+							// 	sequelize.fn("DAY", sequelize.col("date")),
+							// 	req.query.day
+							// ),
+							{ action: req.query.action, serialNumber: { [Op.ne]: null } },
+						],
+					},
+					group: [
+						[sequelize.fn("DAY", sequelize.col("date")), "day"],
+						[sequelize.fn("MONTH", sequelize.col("date")), "month"],
+					],
+				}
+				// [[sequelize.fn("MONTH", sequelize.col("created_at")), "month"]],
+				// { include: [[sequelize.fn("COUNT", sequelize.col("id")), "total"]] },
+			);
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+			//--------------------------------------------------- All -------------------------------------------
+		} else if (req.query.month && req.query.year) {
+			console.log(req.query.month + req.query.year);
+			const etiquettesImprimees = await EtiquetteImprimees.findAll(
+				{
+					attributes: [[sequelize.fn("COUNT", sequelize.col("id")), "total"]],
+					where: {
+						[Op.and]: [
+							sequelize.where(
+								sequelize.fn("YEAR", sequelize.col("date")),
+								req.query.year
+							),
+							sequelize.where(
+								sequelize.fn("MONTH", sequelize.col("date")),
+								req.query.month
+							),
+						],
+					},
+				}
+				// [[sequelize.fn("MONTH", sequelize.col("created_at")), "month"]],
+				// { include: [[sequelize.fn("COUNT", sequelize.col("id")), "total"]] },
+			);
+			res.status(200).json({
+				Status: "Succes",
+				etiquettesImprimees,
+			});
+			//--------------------------------------------------- All -------------------------------------------
 		} else {
 			const etiquettesImprimees = await EtiquetteImprimees.findAll();
 			res.status(200).json({
@@ -177,3 +333,13 @@ exports.GetPrintDetail = async (req, res) => {
 		});
 	}
 };
+// exports.GetAllEtiquettesReImprimees = async (req, res) => {
+// 	try {
+
+// 	} catch (error) {
+// 		res.status(400).json({
+// 			Status: "EtiquetteImprimees Not Found",
+// 			erreur: error,
+// 		});
+// 	}
+// };

@@ -1,4 +1,5 @@
 const HistoriqueProduit = require("../Models/HistoriqueProduitModel");
+const sequelize = require("../ConnexionDB");
 exports.CreateHistoriqueProduit = async (req, res) => {
 	try {
 		const historiqueProduit = await HistoriqueProduit.create(req.body);
@@ -15,6 +16,34 @@ exports.CreateHistoriqueProduit = async (req, res) => {
 };
 exports.GetAllHistoriqueProduit = async (req, res) => {
 	try {
+		if (req.query.userMatricule && req.query.operation !== undefined) {
+			console.log("ddddd");
+			console.log(req.query.operation);
+			historiqueProduit = await HistoriqueProduit.findAll({
+				attributes: [
+					[sequelize.fn("COUNT", sequelize.col("id")), "total"],
+					"operation",
+					[sequelize.fn("DAY", sequelize.col("createdAt")), "day"],
+					[sequelize.fn("MONTH", sequelize.col("createdAt")), "month"],
+					[sequelize.fn("YEAR", sequelize.col("createdAt")), "year"],
+				],
+				where: {
+					userMatricule: req.query.userMatricule,
+				},
+				group: [
+					[sequelize.fn("DAY", sequelize.col("createdAt")), "day"],
+					[sequelize.fn("MONTH", sequelize.col("createdAt")), "month"],
+					[sequelize.fn("YEAR", sequelize.col("createdAt")), "year"],
+					"operation",
+				],
+			}); // autre Méthode
+			if (historiqueProduit != null) {
+				res.status(200).json({
+					Status: "Succes",
+					historiqueProduit,
+				});
+			}
+		}
 		if (req.query.userMatricule) {
 			historiqueProduit = await HistoriqueProduit.findAll({
 				where: {

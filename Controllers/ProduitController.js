@@ -25,6 +25,14 @@ exports.GetAllProduits = async (req, res) => {
 				Status: "Succes",
 				produits: produits,
 			});
+		} else if (req.query.count !== undefined) {
+			const produits = await Produit.findAll({
+				attributes: [[sequelize.fn("COUNT", sequelize.col("ref")), "total"]],
+			});
+			res.status(200).json({
+				Status: "Succes",
+				produits: produits,
+			});
 		} else {
 			const produits = await Produit.findAll();
 			res.status(200).json({
