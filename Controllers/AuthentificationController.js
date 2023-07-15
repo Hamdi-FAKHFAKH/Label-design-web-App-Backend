@@ -8,14 +8,6 @@ exports.SignIn = async (req, res, next) => {
 		const user = await Utilisateur.findOne({
 			where: { matricule: req.body.matricule },
 		});
-		if (!user?.statut) {
-			next(
-				new AppError(
-					"Compte déactivé, veuillez contacter votre supérieur pour vous activer votre compte",
-					400
-				)
-			);
-		}
 		if (!user) {
 			next(
 				new AppError(
@@ -23,11 +15,17 @@ exports.SignIn = async (req, res, next) => {
 					400
 				)
 			);
-		}
-		if (!(await bcrypt.compare(req.body.motDePasse, user.motDePasse))) {
+		} else if (!(await bcrypt.compare(req.body.motDePasse, user.motDePasse))) {
 			next(
 				new AppError(
 					"Mot de passe incorrect, veuillez vérifier le mot de passe saisi, sinon veuillez contacter votre supérieur pour le réinitialiser",
+					400
+				)
+			);
+		} else if (!user?.statut) {
+			next(
+				new AppError(
+					"Compte déactivé, veuillez contacter votre supérieur pour vous activer votre compte",
 					400
 				)
 			);
